@@ -10,8 +10,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <graalvm.version>21.2.0</graalvm.version>
-        <jackson.version>2.12.1</jackson.version>
+        <graalvm.version>21.3.1</graalvm.version>
+        <jackson.version>2.13.2</jackson.version>
     </properties>
 
     <dependencies>
