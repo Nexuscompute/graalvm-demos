@@ -10,7 +10,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <graalvm.version>20.0.0</graalvm.version>
+        <graalvm.version>21.0.0</graalvm.version>
         <jackson.version>2.10.1</jackson.version>
         <app.main.class>oracle.App</app.main.class>
         <!-- Define the version of the GraalVM Maven Plugin we want to use -->
@@ -87,7 +87,7 @@
                             <arguments>
                                 <argument>-agentlib:native-image-agent=config-output-dir=./src/main/resources/META-INF/native-image/</argument>
                                 <argument>-classpath</argument>
-                                <classpath />
+                                <classpath/>
                                 <argument>oracle.App</argument>
                             </arguments>
                         </configuration>
@@ -186,7 +186,7 @@
                     <executable>java</executable>
                     <arguments>
                         <argument>-classpath</argument>
-                        <classpath />
+                        <classpath/>
                         <argument>${app.main.class}</argument>
                     </arguments>
                 </configuration>
