@@ -1,0 +1,34 @@
+name: archive/js-java-async-helidon
+on:
+  push:
+    paths:
+      - 'archive/js-java-async-helidon/**'
+      - '.github/workflows/archive-js-java-async-helidon.yml'
+  pull_request:
+    paths:
+      - 'archive/js-java-async-helidon/**'
+      - '.github/workflows/archive-js-java-async-helidon.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  run:
+    name: Run 'archive/js-java-async-helidon'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '21'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: 'maven'
+      - name: Run 'archive/js-java-async-helidon'
+        run: |
+          cd archive/js-java-async-helidon
+          mvn --no-transfer-progress clean package
+          mvn exec:exec &
+          sleep 10
+          curl http://localhost:8080/greet?request=41
+          curl http://localhost:8080/greet?request=foo

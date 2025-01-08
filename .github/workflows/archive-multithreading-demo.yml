@@ -1,0 +1,38 @@
+name: archive/multithreading-demo
+on:
+  push:
+    paths:
+      - 'archive/multithreading-demo/**'
+      - '.github/workflows/archive-multithreading-demo.yml'
+  pull_request:
+    paths:
+      - 'archive/multithreading-demo/**'
+      - '.github/workflows/archive-multithreading-demo.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  run:
+    name: Run 'archive/multithreading-demo'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '21'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: 'maven'
+      - name: Run 'multithreading-demo-oversized'
+        run: |
+          cd archive/multithreading-demo/multithreading-demo-oversized
+          mvn --no-transfer-progress package
+          java -jar target/multithreading-1.0-jar-with-dependencies.jar
+          ./target/multithreading-image-oversized
+      - name: Run 'multithreading-demo-improved'
+        run: |
+          cd archive/multithreading-demo/multithreading-demo-improved
+          mvn --no-transfer-progress package
+          java -jar target/multithreading-1.0-jar-with-dependencies.jar
+          ./target/multithreading-image-improved

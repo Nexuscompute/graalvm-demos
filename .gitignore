@@ -159,8 +159,9 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 
-# Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
-!/.mvn/wrapper/maven-wrapper.jar
+# Avoid ignoring Maven and Gradle wrapper jar files (.jar files are usually ignored)
+!**/.mvn/wrapper/maven-wrapper.jar
+!**/gradle/wrapper/gradle-wrapper.jar
 
 ### Node ###
 # Logs
@@ -239,8 +240,6 @@ micronaut-webapp/docker-compose.yml
 /native-heapdump-examples/helloworld
 native-list-dir/listdir
 native-list-dir/listdir.build_artifacts.txt
-java-kotlin-aot/helloworld
-java-kotlin-aot/helloworld.build_artifacts.txt
 shared
 micronaut-hello-rest-gradle/hello/
 micronaut-webapp/loadTests/results-*
@@ -266,3 +265,4 @@ espresso-jshell/espresso-jshell.build_artifacts.txt
 native-list-dir/extlistdir
 native-list-dir/extlistdir.build_artifacts.txt
 *.pyc
+*.iprof

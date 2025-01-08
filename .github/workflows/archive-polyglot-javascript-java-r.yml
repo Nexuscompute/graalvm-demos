@@ -1,0 +1,33 @@
+name: archive/polyglot-javascript-java-r
+on:
+  push:
+    paths:
+      - 'archive/polyglot-javascript-java-r/**'
+      - '.github/workflows/archive-polyglot-javascript-java-r.yml'
+  pull_request:
+    paths:
+      - 'archive/polyglot-javascript-java-r/**'
+      - '.github/workflows/archive-polyglot-javascript-java-r.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  run:
+    name: Run 'archive/polyglot-javascript-java-r'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          version: '22.3.0' # locked to 22.3.0 due to R
+          java-version: '17'
+          components: 'nodejs,R'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run 'archive/polyglot-javascript-java-r'
+        run: |
+          cd archive/polyglot-javascript-java-r
+          npm install
+          $GRAALVM_HOME/bin/node --jvm --polyglot server.js &
+          sleep 10
+          curl http://localhost:3000/

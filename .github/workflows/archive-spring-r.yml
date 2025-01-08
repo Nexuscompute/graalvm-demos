@@ -1,0 +1,33 @@
+name: archive/spring-r
+on:
+  push:
+    paths:
+      - 'archive/spring-r/**'
+      - '.github/workflows/archive-spring-r.yml'
+  pull_request:
+    paths:
+      - 'archive/spring-r/**'
+      - '.github/workflows/archive-spring-r.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  run:
+    name: Run 'archive/spring-r'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          version: '22.3.0'
+          java-version: '11'
+          components: 'R'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: 'maven'
+      - name: Run 'archive/spring-r'
+        run: |
+          cd archive/spring-r
+          mvn --no-transfer-progress spring-boot:run -Dgraalvm.version=22.3.0 &
+          sleep 60
+          curl http://localhost:8080/load

@@ -1,0 +1,45 @@
+name: native-image/benchmark/jmh/binary-tree
+on:
+  push:
+    paths:
+      - 'native-image/benchmark/jmh/binary-tree/**'
+      - '.github/workflows/native-image-jmh-binary-tree.yml'
+  pull_request:
+    paths:
+      - 'native-image/benchmark/jmh/binary-tree/**'
+      - '.github/workflows/native-image-jmh-binary-tree.yml'
+  schedule:
+    - cron: "0 0 1 * *" # run every month
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    name: JMH Binary Tree Benchmark
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      matrix:
+        java-version: ['21', '24-ea']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and Test Java Code
+        run: |
+          cd native-image/benchmark/jmh/binary-tree
+          # Build the Java code
+          ./mvnw --no-transfer-progress clean package
+          # Build the native executable
+          ./mvnw --no-transfer-progress -Pnative -DskipNativeTests package
+          # Could just replace with a check that the binary exists?
+          ./target/benchmark-binary-tree
+          # Build and run the instrumented native executable
+          ./mvnw --no-transfer-progress -Pinstrumented -DskipNativeTests package
+          ./target/benchmark-binary-tree-instr
+          # Build and run the optimized native executable
+          ./mvnw --no-transfer-progress -Poptimised -DskipNativeTests package
+          ./target/benchmark-binary-tree-opt

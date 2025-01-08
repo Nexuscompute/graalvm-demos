@@ -1,0 +1,7 @@
+*.class
+*.txt
+helloworld
+svmheapdump
+*.hprof
+svmheapdumpapi
+*.hprof.hwcache

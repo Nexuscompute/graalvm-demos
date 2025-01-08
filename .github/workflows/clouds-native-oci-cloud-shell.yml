@@ -1,0 +1,36 @@
+name: clouds/native-oci-cloud-shell
+on:
+  push:
+    paths:
+      - 'native-image/clouds/native-oci-cloud-shell/**'
+      - '.github/workflows/clouds-native-oci-cloud-shell.yml'
+  pull_request:
+    paths:
+      - 'native-image/clouds/native-oci-cloud-shell/**'
+      - '.github/workflows/clouds-native-oci-cloud-shell.yml'
+  schedule:
+    - cron: "0 0 1 * *" # run every month
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  run:
+    name: Run 'clouds/native-oci-cloud-shell'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '21'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: 'maven'
+          native-image-job-reports: 'true'
+      - name: Run 'clouds/native-oci-cloud-shell'
+        run: |
+          cd native-image/clouds/native-oci-cloud-shell
+          mvn --no-transfer-progress clean package
+          java -jar target/my-app-1.0-SNAPSHOT.jar
+          mvn --no-transfer-progress clean -Pnative -DskipTests package
+          ./target/my-app
